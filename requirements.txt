@@ -1,0 +1,13 @@
+Django==3.1.6
+admin
+django-simple_history
+django-ckeditor
+automium_web
+python-dotenv
+django-tinymce
+asgiref==3.3.1
+sqlparse
+six
+pytz
+whitenoise
+psycopg2

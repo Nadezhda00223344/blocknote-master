@@ -1,0 +1,41 @@
+version: "3.9"
+
+volumes:
+  db:
+
+services:
+
+  db:
+    image: postgres:13.2-alpine
+    container_name: db
+    volumes:
+      - db:/var/lib/postgresql/data
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=0000
+      - POSTGRES_DB=pyproj
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pyproj:
+    build: .
+    container_name: pyproj
+    restart: always
+    environment:
+      - DJANGO_DB_ENGINE=django.db.backends.postgresql
+      - DJANGO_DB_DATABASE=pyproj
+      - DJANGO_DB_USER=postgres
+      - DJANGO_DB_PASSWORD=0000
+      - DJANGO_DB_HOST=db
+      - DJANGO_DB_PORT=5432
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    command: python3 manage.py runserver 0.0.0.0:8080
+
+
+
